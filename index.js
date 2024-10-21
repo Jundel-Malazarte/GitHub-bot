@@ -3,41 +3,41 @@ import moment from "moment";
 import simpleGit from "simple-git";
 import random from "random";
 
+const git = simpleGit();
 const path = "./data.json";
 
-const markCommit = (x, y, callback) => {
+const markCommit = async (x, y) => {
   const date = moment()
     .subtract(1, "y")
-    .add(1, "d")
     .add(x, "w")
     .add(y, "d")
-    .format(); // Generate random date
+    .format("YYYY-MM-DDTHH:mm:ss"); // Generate ISO 8601 format date
 
   const data = {
     date: date,
   };
 
-  jsonfile.writeFile(path, data, () => {
-    // Commit with custom date
-    simpleGit()
-      .add([path])
-      .commit(date, { "--date": date, "--no-verify": true }, callback);
-  });
+  await jsonfile.writeFile(path, data); // Write date to data.json
+
+  // Make the commit with custom date
+  await git.add([path]);
+  await git.commit(`Commit for date ${date}`, { "--date": date, "--no-verify": true });
 };
 
-const makeCommits = (n) => {
+const makeCommits = async (n) => {
   if (n === 0) {
-    return simpleGit().push(); // Push after all commits
+    console.log("All commits made, pushing to repository...");
+    return git.push(); // Push after all commits
   }
 
   const x = random.int(0, 54); // Random week within a year (54 weeks)
   const y = random.int(0, 6);  // Random day within a week (6 days)
 
-  markCommit(x, y, () => {
-    console.log(`Commit ${201 - n} made`);
-    makeCommits(n - 1);
-  });
+  await markCommit(x, y);
+  console.log(`Commit ${201 - n} made with random date`);
+
+  return makeCommits(n - 1); // Continue making commits
 };
 
-// Start making 500 commits
-makeCommits(500);
+// Start making 200 commits
+makeCommits(200);
