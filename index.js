@@ -41,10 +41,10 @@ const makeCommits = async (n) => {
   const y = random.int(0, 6);  // Random day within the week
 
   await markCommit(x, y);
-  console.log(`Commit ${31 - n} made with random date`); // Adjust the limit "Commit"
+  console.log(`Commit ${51 - n} made with random date`); // Adjust the limit "Commit"
 
   return makeCommits(n - 1); // Continue making commits
 };
 
-// Start making 30 commits
-makeCommits(30);
+// Start making 50 commits
+makeCommits(50);
