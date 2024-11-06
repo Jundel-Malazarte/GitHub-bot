@@ -46,5 +46,5 @@ const makeCommits = async (n, year, month, day) => {
 };
 
 // Start making commits -- set your commit year, month, and day
-makeCommits(10, 2024, 1, 25); // Example: making 250 commits with the date June 15, 2023
+makeCommits(10, 2024, 1, 13); // Example: making 250 commits with the date Jan 1, 2024
 // Commits, year, month, and day can be adjusted as needed.
