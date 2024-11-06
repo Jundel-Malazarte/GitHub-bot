@@ -35,10 +35,9 @@ const removeCommits = async (commitIndex, date) => {
 
     // Rebase or reset to remove this commit
     console.log(`Removing commit: ${commitToRemove.hash}`);
+    
+    // Perform the rebase to remove the commit
     await git.rebase(['--onto', 'HEAD', commitToRemove.hash]);
-
-    // Optionally, you can reset the commit instead:
-    // await git.reset(['--hard', commitToRemove.hash]);
 
     console.log(`Commit ${commitToRemove.hash} has been removed successfully.`);
   } catch (err) {
@@ -48,7 +47,7 @@ const removeCommits = async (commitIndex, date) => {
 
 // Set the specific date and commit index (e.g., 1 commit on 2024-11-29)
 const date = '2024-11-29T00:00:00'; // Set the specific date here
-const commitIndex = 5; // The specific commit index you want to remove
+const commitIndex = 1; // The specific commit index you want to remove
 
 // Call the function to remove the commit
 removeCommits(commitIndex, date);
