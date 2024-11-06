@@ -6,13 +6,13 @@ import random from "random";
 const git = simpleGit();
 const path = "./data.json";
 
-const markCommit = async (x, y) => {
-  // Adjust the date logic to focus on the year 2021
+// markCommit now accepts year, month, and day
+const markCommit = async (year, month, day) => {
+  // Adjust the date logic to use the specified year, month, and day
   const date = moment()
-    .year(2023) // Set year u want
-    .startOf('year') // Start from January 1st, 2021
-    .add(x, "w") // Add random weeks
-    .add(y, "d") // Add random days
+    .year(year) // Set specific year
+    .month(month - 1) // Months are 0-indexed, so subtract 1 for correct month
+    .date(day) // Set specific day of the month
     .set({
       hour: random.int(0, 23),
       minute: random.int(0, 59),
@@ -31,20 +31,19 @@ const markCommit = async (x, y) => {
   await git.commit(`Commit for date ${date}`, { "--date": date, "--no-verify": true });
 };
 
-const makeCommits = async (n) => {
+// makeCommits accepts n (number of commits) and year, month, day for manual input
+const makeCommits = async (n, year, month, day) => {
   if (n === 0) {
     console.log("All commits made, pushing to repository...");
     return git.push(); // Push after all commits
   }
 
-  const x = random.int(0, 52); // Random week within 52 weeks (adjusted for 2021)
-  const y = random.int(0, 6);  // Random day within the week
+  // Call markCommit with manually set year, month, and day
+  await markCommit(year, month, day);
+  console.log(`Commit ${250 - n} made with date ${year}-${month}-${day}`); // Show commit number and date
 
-  await markCommit(x, y);
-  console.log(`Commit ${251 - n} made with random date`); // Adjust the limit "Commit"
-
-  return makeCommits(n - 1); // Continue making commits
+  return makeCommits(n - 1, year, month, day); // Continue making commits with the same date
 };
 
-// Start making commits -- set your commit
-makeCommits(250);
+// Start making commits -- set your commit year, month, and day
+makeCommits(20, 2023, 1, 1); // Example: making 250 commits with the date June 15, 2023
