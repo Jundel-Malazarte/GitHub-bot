@@ -9,7 +9,7 @@ const path = "./data.json";
 const markCommit = async (x, y) => {
   // Adjust the date logic to focus on the year 2021
   const date = moment()
-    .year(2021) // Set year u want
+    .year(2022) // Set year u want
     .startOf('year') // Start from January 1st, 2021
     .add(x, "w") // Add random weeks
     .add(y, "d") // Add random days
@@ -41,10 +41,10 @@ const makeCommits = async (n) => {
   const y = random.int(0, 6);  // Random day within the week
 
   await markCommit(x, y);
-  console.log(`Commit ${21 - n} made with random date`); // Adjust the limit "Commit"
+  console.log(`Commit ${501 - n} made with random date`); // Adjust the limit "Commit"
 
   return makeCommits(n - 1); // Continue making commits
 };
 
 // Start making commits -- set your commit
-makeCommits(1000);
+makeCommits(500);
