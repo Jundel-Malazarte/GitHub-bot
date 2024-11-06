@@ -10,8 +10,11 @@ const removeCommits = async (commitIndex, date) => {
   try {
     console.log(`Searching for commits after: ${date}`);
 
+    // Convert date to UTC format
+    const targetDate = moment(date).utc().format('YYYY-MM-DDTHH:mm:ss');
+
     // Get the commit logs for the date range (after the given date)
-    const log = await git.log({ '--after': date });
+    const log = await git.log({ '--after': targetDate });
 
     // Log the commit history to see what is returned
     console.log('Commit history:', log.all);
@@ -47,7 +50,7 @@ const removeCommits = async (commitIndex, date) => {
 
 // Set the specific date and commit index (e.g., 1 commit on 2024-11-29)
 const date = '2024-11-29T00:00:00'; // Set the specific date here
-const commitIndex = 1; // The specific commit index you want to remove
+const commitIndex = 5; // The specific commit index you want to remove
 
 // Call the function to remove the commit
 removeCommits(commitIndex, date);
