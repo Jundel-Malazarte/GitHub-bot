@@ -5,38 +5,50 @@ import simpleGit from 'simple-git';
 const git = simpleGit();
 const path = './data.json';
 
-const removeCommitsOnSpecificDay = async (date) => {
+// Function to remove a specific commit by index on a given date
+const removeCommits = async (commitIndex, date) => {
   try {
-    console.log(`Removing commits on: ${date}`);
+    console.log(`Searching for commits after: ${date}`);
 
-    // Get the commit logs for the specific date
-    const log = await git.log({ '--after': date, '--before': moment(date).add(1, 'day').format('YYYY-MM-DD') });
+    // Get the commit logs for the date range (after the given date)
+    const log = await git.log({ '--after': date });
 
-    // Check if any commits exist for that date
-    const commits = log.all.filter(commit => commit.date.includes(date));
+    // Log the commit history to see what is returned
+    console.log('Commit history:', log.all);
 
-    if (commits.length === 0) {
-      console.log('No commits found on this date.');
+    // Check if any commits exist after the given date
+    if (log.all.length === 0) {
+      console.log('No commits found after this date.');
       return;
     }
 
-    console.log(`Found ${commits.length} commits on ${date}.`);
-
-    // Loop through each commit and reset to the commit before it
-    for (const commit of commits) {
-      console.log(`Removing commit: ${commit.hash}`);
-      // Use git rebase or reset as needed
-      await git.rebase(['--onto', 'HEAD', commit.hash]);
-      // Or if you want to reset, you can use this:
-      // await git.reset(['--hard', commit.hash]);
+    // Validate the commit index
+    if (commitIndex > log.all.length || commitIndex <= 0) {
+      console.log(`Invalid commit index. Please select an index between 1 and ${log.all.length}.`);
+      return;
     }
 
-    console.log(`Commits on ${date} have been removed successfully.`);
+    // Get the commit at the specified index (1-based index, so subtract 1 for 0-based array)
+    const commitToRemove = log.all[commitIndex - 1];
+
+    console.log(`Found commit: ${commitToRemove.hash} on ${commitToRemove.date}`);
+
+    // Rebase or reset to remove this commit
+    console.log(`Removing commit: ${commitToRemove.hash}`);
+    await git.rebase(['--onto', 'HEAD', commitToRemove.hash]);
+
+    // Optionally, you can reset the commit instead:
+    // await git.reset(['--hard', commitToRemove.hash]);
+
+    console.log(`Commit ${commitToRemove.hash} has been removed successfully.`);
   } catch (err) {
-    console.error('Error removing commits:', err);
+    console.error('Error removing commit:', err);
   }
 };
 
-// Set the specific date you want to remove commits for (example: '2024-11-29')
-const date = '2024-12-10T00:00:00'; 
-removeCommitsOnSpecificDay(date);
+// Set the specific date and commit index (e.g., 1 commit on 2024-11-29)
+const date = '2024-11-29T00:00:00'; // Set the specific date here
+const commitIndex = 5; // The specific commit index you want to remove
+
+// Call the function to remove the commit
+removeCommits(commitIndex, date);
