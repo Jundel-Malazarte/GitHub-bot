@@ -1,5 +1,3 @@
-## Creating a Git Bot JavaScript
-
 MIT License
 
 Copyright (c) 2024 Mr.Malazarte
