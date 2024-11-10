@@ -5,7 +5,7 @@ import simpleGit from 'simple-git';
 const git = simpleGit();
 const path = './data.json';
 
-// Function to remove commits after a specific date, considering any time on that date
+// Function to remove commits after a specific date
 const removeCommits = async (date) => {
   try {
     console.log(`Searching for commits after: ${date}`);
@@ -41,7 +41,7 @@ const removeCommits = async (date) => {
   }
 };
 
-// Set the specific date for tracking commits (e.g., 2024-11-29)
+// Set the specific date for tracking commits (e.g., 2024-11-02)
 const date = '2024-11-02'; // Set the specific date here (no need for specific time)
 
 
