@@ -10,15 +10,15 @@ const path = "./data.json";
 const markCommit = async (year, month, day) => {
   // Adjust the date logic to use the specified year, month, and day
   const date = moment()
-    .year(year) // Set specific year
-    .month(month - 1) // Months are 0-indexed, so subtract 1 for correct month
-    .date(day) // Set specific day of the month
-    .set({
-      hour: random.int(0, 23),
-      minute: random.int(0, 59),
-      second: random.int(0, 59)
-    }) // Add random time of day
-    .format("YYYY-MM-DDTHH:mm:ss"); // Format as ISO 8601
+  .year(year)
+  .month(month - 1)
+  .date(day)
+  .set({
+    hour: random.int(0, 23),
+    minute: random.int(0, 59),
+    second: random.int(0, 59)
+  })
+  .format("YYYY-MM-DD HH:mm:ss"); // Correct date format | Format as ISO 8601
 
   const data = {
     date: date,
@@ -28,23 +28,26 @@ const markCommit = async (year, month, day) => {
 
   // Make the commit with custom date
   await git.add([path]);
-  await git.commit(`Commit for date ${date}`, { "--date": date, "--no-verify": true });
+  // Commit with the specified date
+  await git.commit(`Commit for date ${date}`, { "--date": `"${date}"` });
+  await git.push(); // Push the commit to the remote repository
 };
 
 // makeCommits accepts n (number of commits) and year, month, day for manual input
 const makeCommits = async (n, year, month, day) => {
   if (n === 0) {
-    console.log("All commits made, pushing to repository...");
-    return git.push(); // Push after all commits
+    console.log("All commits made.");
+    return;
   }
 
   // Call markCommit with manually set year, month, and day
   await markCommit(year, month, day);
-  console.log(`Commit ${11 - n} made with date ${year}-${month}-${day}`); // Change the number oof commit
+  // Set the specific commt.
+  console.log(`Commit ${13 - n} made with date ${year}-${month}-${day}`); // Show commit number and date
 
   return makeCommits(n - 1, year, month, day); // Continue making commits with the same date
 };
 
 // Start making commits -- set your commit year, month, and day
-makeCommits(10, 2025, 3, 4); // Example: making commits with the date Jan 1, 2024
+makeCommits(34, 2024, 11, 22); // Example: making commits with the date Jan 1, 2024
 // Commits, year, month, and day can be adjusted as needed.
