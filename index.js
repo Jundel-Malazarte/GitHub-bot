@@ -10,15 +10,15 @@ const path = "./data.json";
 const markCommit = async (year, month, day) => {
   // Adjust the date logic to use the specified year, month, and day
   const date = moment()
-    .year(year) // Set specific year
-    .month(month - 1) // Months are 0-indexed, so subtract 1 for correct month
-    .date(day) // Set specific day of the month
-    .set({
-      hour: random.int(0, 23),
-      minute: random.int(0, 59),
-      second: random.int(0, 59)
-    }) // Add random time of day
-    .format("YYYY-MM-DDTHH:mm:ss"); // Format as ISO 8601
+  .year(year)
+  .month(month - 1)
+  .date(day)
+  .set({
+    hour: random.int(0, 23),
+    minute: random.int(0, 59),
+    second: random.int(0, 59)
+  })
+  .format("YYYY-MM-DD HH:mm:ss"); // Correct date format | Format as ISO 8601
 
   const data = {
     date: date,
@@ -28,7 +28,8 @@ const markCommit = async (year, month, day) => {
 
   // Make the commit with custom date
   await git.add([path]);
-  await git.commit(`Commit for date ${date}`, { "--date": date, "--no-verify": true });
+  // Commit with the specified date
+  await git.commit(`Commit for date ${date}`, { "--date": `"${date}"` });
   await git.push(); // Push the commit to the remote repository
 };
 
