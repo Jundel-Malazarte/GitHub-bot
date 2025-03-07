@@ -40,11 +40,12 @@ const makeCommits = async (n, year, month, day) => {
 
   // Call markCommit with manually set year, month, and day
   await markCommit(year, month, day);
-  console.log(`Commit ${35 - n} made with date ${year}-${month}-${day}`); // Show commit number and date
+  // Set the specific commt.
+  console.log(`Commit ${11 - n} made with date ${year}-${month}-${day}`); // Show commit number and date
 
   return makeCommits(n - 1, year, month, day); // Continue making commits with the same date
 };
 
 // Start making commits -- set your commit year, month, and day
-makeCommits(34, 2024, 11, 22); // Example: making commits with the date Jan 1, 2024
+makeCommits(10, 2025, 3, 4); // Example: making commits with the date Jan 1, 2024
 // Commits, year, month, and day can be adjusted as needed.
