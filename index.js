@@ -29,23 +29,24 @@ const markCommit = async (year, month, day) => {
   // Make the commit with custom date
   await git.add([path]);
   await git.commit(`Commit for date ${date}`, { "--date": date, "--no-verify": true });
+  await git.push(); // Push the commit to the remote repository
 };
 
 // makeCommits accepts n (number of commits) and year, month, day for manual input
 const makeCommits = async (n, year, month, day) => {
   if (n === 0) {
-    console.log("All commits made, pushing to repository...");
-    return git.push(); // Push after all commits
+    console.log("All commits made.");
+    return;
   }
 
   // Call markCommit with manually set year, month, and day
   await markCommit(year, month, day);
   // Set the specific commt.
-  console.log(`Commit ${6 - n} made with date ${year}-${month}-${day}`); // Show commit number and date
+  console.log(`Commit ${11 - n} made with date ${year}-${month}-${day}`); // Show commit number and date
 
   return makeCommits(n - 1, year, month, day); // Continue making commits with the same date
 };
 
 // Start making commits -- set your commit year, month, and day
-makeCommits(5, 2025, 3, 5); // Example: making commits with the date Jan 1, 2024
+makeCommits(10, 2025, 3, 4); // Example: making commits with the date Jan 1, 2024
 // Commits, year, month, and day can be adjusted as needed.
